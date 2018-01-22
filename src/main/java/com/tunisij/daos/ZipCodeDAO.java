@@ -7,11 +7,9 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
-
 import com.tunisij.businessObjects.ZipCodeBO;
 
-public class ZipCodeDAO extends JdbcDaoSupport {
+public class ZipCodeDAO {
 
 	private DataSource dataSource;
 	
@@ -20,13 +18,19 @@ public class ZipCodeDAO extends JdbcDaoSupport {
 	}
 
 	public ZipCodeBO getZipCode(Integer zipCode) {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		ZipCodeBO zipCodeBO = new ZipCodeBO(zipCode);
 		
-		String sql = "SELECT * FROM routemining.zip_code";
+		String sql = "SELECT * FROM routemining.zip_code WHERE zip_code = ?";
 		
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);
-				ResultSet rs = ps.executeQuery();) {
+		try {
+			connection = dataSource.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, zipCode);
+			rs = ps.executeQuery();
+			
 			if(rs.next()) {
 				zipCodeBO.setAvgHouseValue(rs.getInt("avg_house_value"));
 				zipCodeBO.setHouseholdIncome(rs.getInt("household_income"));
