@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import com.tunisij.businessObjects.ZipCodeBO;
 
-public class ZipCodeDAO {
+public class ZipCodeDAO extends BaseDAO {
 
 	private DataSource dataSource;
 	
@@ -40,7 +40,9 @@ public class ZipCodeDAO {
 				zipCodeBO.setPopulation(rs.getInt("population"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
+		} finally {
+			closeResources(rs, ps, connection);
 		}
 		
 		return zipCodeBO;

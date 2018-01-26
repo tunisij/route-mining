@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 import com.tunisij.businessObjects.RouteBO;
 import com.tunisij.businessObjects.ZipCodeBO;
 
-public class RouteScraper {
+public class RouteScraper extends BaseScraper {
 	
 	private static final String SITE_URL = "http://www.melissadata.com/lookups/MapCartS.asp?zip=";
 
@@ -58,9 +58,8 @@ public class RouteScraper {
 				routeList.add(routeBO);
 				System.out.println(routeBO.toString());
 			}
-
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		}
 		
 		return routeList;

@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class BaseDAO {
+import com.tunisij.common.Logger;
+
+public abstract class BaseDAO {
+	
+	protected static final Logger logger = Logger.getLogger();
 	
 	public static void closeResources(PreparedStatement ps, Connection connection) {
 		closeResources(null, ps, connection);
@@ -17,7 +21,7 @@ public class BaseDAO {
 			if (ps != null) { ps.close(); }
 			if (connection != null) { connection.close(); }
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		}
 	}
 }

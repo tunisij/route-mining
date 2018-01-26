@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 
 import com.tunisij.businessObjects.ZipCodeBO;
 
-public class ZipCodeScraper {
+public class ZipCodeScraper extends BaseScraper {
 	
 	private static final String ZIP_RADIUS_URL = "https://www.searchbug.com/tools/zip-radius.aspx?";
 	private static final String ZIP_CODE_LOOKUP_URL = "https://www.searchbug.com/tools/zip-code-lookup.aspx?";
@@ -63,7 +63,7 @@ public class ZipCodeScraper {
 			Element neElement = elements.select("tr:contains(Number Of Employees)").first();
 			zipCodeBO.setNumEmployees(neElement != null ? Integer.parseInt(neElement.getElementsByIndexEquals(1).text().replaceAll("[^0-9]","")) : null);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		}
 		
 		return zipCodeBO;
@@ -78,7 +78,7 @@ public class ZipCodeScraper {
 			Elements elements = document.getElementsByClass("Data");
 			elements.forEach(element -> zipCodes.add(Integer.parseInt(((TextNode) element.getElementsByTag("a").first().childNode(0)).text())));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		}
 		
 		return zipCodes;

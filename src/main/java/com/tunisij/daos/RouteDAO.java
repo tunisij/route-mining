@@ -52,7 +52,7 @@ public class RouteDAO extends BaseDAO {
 			ps.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		} finally {
 			closeResources(ps, connection);
 		}
@@ -88,7 +88,7 @@ public class RouteDAO extends BaseDAO {
 				routes.add(routeBO);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		} finally {
 			closeResources(rs, ps, connection);
 		}
