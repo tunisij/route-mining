@@ -31,101 +31,146 @@
 
 	<div class="container">
 		<div>
-			<form:form method="post" modelAttribute="zipCodeForm" action="processForm">
+			<form:form method="post" modelAttribute="zipCodeForm"
+				action="processForm">
 				<table>
 					<tr>
 						<td>Zip Code:</td>
-						<td><form:input path="zipCode" value="${zipCode}"/></td>
+						<td><form:input path="zipCode" value="${zipCode}" /></td>
 					</tr>
+					<br />
 					<tr>
 						<td>Distance:</td>
-						<td><form:input path="distance" value="${distance}"/></td>
+						<td><form:input path="distance" value="${distance}" /></td>
 					</tr>
 				</table>
 				<input type="submit" value="Submit" />
 			</form:form>
-			
-			
-			<!--
-			<form action="/processForm" method="post">
-				<table>
-					<tr>
-						<td>Zip Code:</td>
-						<td><input type="text" name="zipCode" /></td>
-					</tr>
-					<tr>
-						<td>Distance:</td>
-						<td><input type="text" name="distance" /></td>
-					</tr>
-				</table>
-				<input type="submit" value="Submit" />
-			</form>
-			-->
 		</div>
 
-		<table>
+		<br /> <br />
+		<c:choose>
+			<c:when test="${!empty zipCodeForm.zipCodes}">
+				<div class="tableContainer">
+					<table id="homeTable">
+						<thead class="fixedHeader">
+							<tr>
+								<th>Zip Code</th>
+								<th>Avg House Value</th>
+								<th>Household Income</th>
+								<th>Median Age</th>
+								<th>Number of Businesses</th>
+								<th>Number of Employees</th>
+								<th>Population</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="zipCode" items="${zipCodeForm.zipCodes}">
+								<tr>
+									<td><c:out value="${zipCode.zipCode}" /></td>
+									<td><c:out value="${zipCode.avgHouseValue}" /></td>
+									<td><c:out value="${zipCode.householdIncome}" /></td>
+									<td><c:out value="${zipCode.medianAge}" /></td>
+									<td><c:out value="${zipCode.numBusinesses}" /></td>
+									<td><c:out value="${zipCode.numEmployees}" /></td>
+									<td><c:out value="${zipCode.population}" /></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</c:when>
+		</c:choose>
 
-		</table>
+		<br /> <br />
 
-		<table style="border: 1px solid;">
-			<tr>
-				<th>Zip Code</th>
-				<th>Avg House Value</th>
-				<th>Household Income</th>
-				<th>Median Age</th>
-				<th>Number of Businesses</th>
-				<th>Number of Employees</th>
-				<th>Population</th>
-			</tr>
-			<c:forEach var="zipCode" items="${zipCodeForm.zipCodes}">
-				<tr>
-					<td><c:out value="${zipCode.zipCode}" /></td>
-					<td><c:out value="${zipCode.avgHouseValue}" /></td>
-					<td><c:out value="${zipCode.householdIncome}" /></td>
-					<td><c:out value="${zipCode.medianAge}" /></td>
-					<td><c:out value="${zipCode.numBusinesses}" /></td>
-					<td><c:out value="${zipCode.numEmployees}" /></td>
-					<td><c:out value="${zipCode.population}" /></td>
-				</tr>
-			</c:forEach>
-		</table>
-
-		<table style="border: 1px solid;">
-			<tr>
-				<th>Zip Code</th>
-				<th>Route</th>
-				<th>Type of Route</th>
-				<th>County Code</th>
-				<th>Business Count</th>
-				<th>Apartment Count</th>
-				<th>PO Box Count</th>
-				<th>Residential Count</th>
-				<th>Total Deliveries</th>
-				<th>Avg Household Income</th>
-				<th>Avg Property Value</th>
-			</tr>
-			<c:forEach var="route" items="${zipCodeForm.routes}">
-				<tr>
-					<td><c:out value="${route.zipCode}" /></td>
-					<td><c:out value="${route.route}" /></td>
-					<td><c:out value="${route.type}" /></td>
-					<td><c:out value="${route.countyCode}" /></td>
-					<td><c:out value="${route.businessCount}" /></td>
-					<td><c:out value="${route.apartmentCount}" /></td>
-					<td><c:out value="${route.poBoxCount}" /></td>
-					<td><c:out value="${route.residentialCount}" /></td>
-					<td><c:out value="${route.totalDeliveries}" /></td>
-					<td><c:out value="${route.avgHouseholdIncome}" /></td>
-					<td><c:out value="${route.avgPropertyValue}" /></td>
-				</tr>
-			</c:forEach>
-		</table>
-
+		<c:choose>
+			<c:when test="${!empty zipCodeForm.routes}">
+				<div class="tableContainer">
+					<table id="homeTable">
+						<thead class="fixedHeader">
+							<tr>
+								<th>Zip Code</th>
+								<th>Route</th>
+								<th>Type of Route</th>
+								<th>County Code</th>
+								<th>Business Count</th>
+								<th>Apartment Count</th>
+								<th>PO Box Count</th>
+								<th>Residential Count</th>
+								<th>Total Deliveries</th>
+								<th>Avg Household Income</th>
+								<th>Avg Property Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="route" items="${zipCodeForm.routes}">
+								<tr>
+									<td><c:out value="${route.zipCode}" /></td>
+									<td><c:out value="${route.route}" /></td>
+									<td><c:out value="${route.type}" /></td>
+									<td><c:out value="${route.countyCode}" /></td>
+									<td><c:out value="${route.businessCount}" /></td>
+									<td><c:out value="${route.apartmentCount}" /></td>
+									<td><c:out value="${route.poBoxCount}" /></td>
+									<td><c:out value="${route.residentialCount}" /></td>
+									<td><c:out value="${route.totalDeliveries}" /></td>
+									<td><c:out value="${route.avgHouseholdIncome}" /></td>
+									<td><c:out value="${route.avgPropertyValue}" /></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</c:when>
+		</c:choose>
 	</div>
+	<br /> <br />
 
 	<script type="text/javascript"
 		src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
+
+<style>
+html, body {
+	height: 100%;
+}
+
+div.tableContainer {
+	clear: both;
+	border: 1px solid #963;
+	height: 285px;
+	overflow: auto;
+	width: 756px;
+}
+
+#homeTable {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#homeTable td, #homeTable th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+#homeTable tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+#homeTable tr:hover {
+	background-color: #ddd;
+}
+
+#homeTable th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #333366;
+	color: white;
+}
+</style>
 
 </html>

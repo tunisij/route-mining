@@ -1,15 +1,18 @@
 package com.tunisij.controllers;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tunisij.businessObjects.ZipCodeBO;
 import com.tunisij.forms.ZipCodeForm;
 import com.tunisij.services.RouteService;
 import com.tunisij.services.ZipCodeService;
@@ -31,8 +34,12 @@ public class HomeController {
 	
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST)
 	public ModelAndView processForm(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
-		form.setZipCodes(Arrays.asList(zipCodeService.getZipCode(form.getZipCode())));
-		form.setRoutes(routeService.getRoutes(form.getZipCode()));
+		List<ZipCodeBO> zipCodes = zipCodeService.getZipCodes(form.getZipCode(), form.getDistance());
+		Collections.sort(zipCodes);
+		
+		form.setZipCodes(zipCodes);
+		form.setRoutes(routeService.getRoutes(zipCodes));
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
+	
 }

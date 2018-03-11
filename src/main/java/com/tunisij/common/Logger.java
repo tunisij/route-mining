@@ -14,7 +14,7 @@ public class Logger {
 
 	private Logger() {}
 	
-	//static inner classnot loaded until referenced
+	//static inner class not loaded until referenced
 	private static class LoggerHelper {
 		private static final Logger INSTANCE = new Logger();
 	}
@@ -23,10 +23,22 @@ public class Logger {
 		return LoggerHelper.INSTANCE;
 	}
 	
-	public void log(String log) {
-		log += System.lineSeparator();
+	public void log(String log, Exception exception) {
+		StringBuilder sb = new StringBuilder(log);
+		sb.append(System.lineSeparator());
+		sb.append("Caused by:");
+		sb.append(System.lineSeparator());
+		for (StackTraceElement element : exception.getStackTrace()) {
+			sb.append(element.getClassName());
+			sb.append(": ");
+			sb.append(element.getMethodName());
+			sb.append(": line ");
+			sb.append(element.getLineNumber());
+			sb.append(System.lineSeparator());
+		}
+		sb.append(System.lineSeparator());
 		try {
-			Files.write(Paths.get(LOG_FILE_PATH), log.getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+			Files.write(Paths.get(LOG_FILE_PATH), sb.toString().getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

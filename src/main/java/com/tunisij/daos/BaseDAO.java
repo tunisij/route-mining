@@ -21,7 +21,7 @@ public abstract class BaseDAO {
 			if (ps != null) { ps.close(); }
 			if (connection != null) { connection.close(); }
 		} catch (SQLException e) {
-			logger.log(e.getMessage());
+			logger.log(e.getMessage(), e);
 		}
 	}
 }

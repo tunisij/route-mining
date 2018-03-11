@@ -1,6 +1,6 @@
 package com.tunisij.businessObjects;
 
-public class ZipCodeBO {
+public class ZipCodeBO implements Comparable<ZipCodeBO> {
 
 	private Integer zipCode;
 	private Integer population;
@@ -74,6 +74,11 @@ public class ZipCodeBO {
 				"\nNum Businesses: " + numBusinesses + 
 				"\nNum Employees: " + numEmployees +
 				"\nPopulation: " + population + "\n";
+	}
+
+	@Override
+	public int compareTo(ZipCodeBO zipCodeBO) {
+		return this.getZipCode().compareTo(zipCodeBO.getZipCode());
 	}
 	
 }

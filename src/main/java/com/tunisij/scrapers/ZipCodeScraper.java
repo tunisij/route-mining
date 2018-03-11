@@ -21,21 +21,6 @@ public class ZipCodeScraper extends BaseScraper {
 	private static final String ZIP_SEARCH = "&ZIP=";
 	private static final String DIST_SEARCH = "&DIST=";
 	
-//	public static void main(String args[]) {
-//		ZipCodeScraper sc = new ZipCodeScraper();
-//		for (Integer zipCode : sc.getZipCodesInRadius(48082, 10)) {
-//			System.out.println(sc.getZipCodeData(zipCode).toString());
-//		}
-//	}
-	
-	public List<ZipCodeBO> getZipCodesInRadiusOfZipCode(Integer zipCode, Integer range) {
-		List<ZipCodeBO> zipCodeList = new ArrayList<>();
-		for (Integer zipCodes : getZipCodesInRadius(zipCode, range)) {
-			zipCodeList.add(getZipCodeData(zipCodes));
-		}
-		return zipCodeList;
-	}
-	
 	public ZipCodeBO getZipCodeData(Integer zipCodeInt) {
 		ZipCodeBO zipCodeBO = new ZipCodeBO(zipCodeInt);
 		String fullUrl = ZIP_CODE_LOOKUP_URL + TYPE_ZIP_2_CITY + ZIP_SEARCH + zipCodeInt;
@@ -63,7 +48,7 @@ public class ZipCodeScraper extends BaseScraper {
 			Element neElement = elements.select("tr:contains(Number Of Employees)").first();
 			zipCodeBO.setNumEmployees(neElement != null ? Integer.parseInt(neElement.getElementsByIndexEquals(1).text().replaceAll("[^0-9]","")) : null);
 		} catch (IOException e) {
-			logger.log(e.getMessage());
+			logger.log(e.getMessage(), e);
 		}
 		
 		return zipCodeBO;
@@ -74,11 +59,11 @@ public class ZipCodeScraper extends BaseScraper {
 		String fullUrl = ZIP_RADIUS_URL + TYPE_ZIP_RADIUS + ZIP_SEARCH + zipCode + DIST_SEARCH + distance;
 		Document document = null;
 		try {
-			document = Jsoup.connect(fullUrl).get();
+			document = Jsoup.connect(fullUrl).timeout(0).get();
 			Elements elements = document.getElementsByClass("Data");
 			elements.forEach(element -> zipCodes.add(Integer.parseInt(((TextNode) element.getElementsByTag("a").first().childNode(0)).text())));
 		} catch (IOException e) {
-			logger.log(e.getMessage());
+			logger.log(e.getMessage(), e);
 		}
 		
 		return zipCodes;

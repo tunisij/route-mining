@@ -41,7 +41,7 @@ public class RouteDAO extends BaseDAO {
 			ps.setInt(2, route.getZipCode());
 			ps.setString(3, route.getType());
 			ps.setString(4, route.getCountyCode());
-			ps.setInt(4, route.getBusinessCount());
+			ps.setInt(5, route.getBusinessCount());
 			ps.setInt(6, route.getApartmentCount());
 			ps.setInt(7, route.getPoBoxCount());
 			ps.setInt(8, route.getResidentialCount());
@@ -50,9 +50,8 @@ public class RouteDAO extends BaseDAO {
 			ps.setInt(11, route.getAvgPropertyValue());
 			
 			ps.executeUpdate();
-			connection.commit();
 		} catch (SQLException e) {
-			logger.log(e.getMessage());
+			logger.log(e.getMessage(), e);
 		} finally {
 			closeResources(ps, connection);
 		}
@@ -88,7 +87,7 @@ public class RouteDAO extends BaseDAO {
 				routes.add(routeBO);
 			}
 		} catch (SQLException e) {
-			logger.log(e.getMessage());
+			logger.log(e.getMessage(), e);
 		} finally {
 			closeResources(rs, ps, connection);
 		}

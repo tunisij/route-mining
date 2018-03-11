@@ -11,6 +11,24 @@ public class ZipCodeForm {
 	private Integer distance;
 	private List<ZipCodeBO> zipCodes;
 	private List<RouteBO> routes;
+	private Double price;
+	private Double budget;
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Double getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Double budget) {
+		this.budget = budget;
+	}
 
 	public List<ZipCodeBO> getZipCodes() {
 		return zipCodes;
