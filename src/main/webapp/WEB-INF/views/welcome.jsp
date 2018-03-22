@@ -28,11 +28,10 @@
 			</div>
 		</div>
 	</nav>
-
+<form:form method="post" modelAttribute="zipCodeForm" action="processForm">
 	<div class="container">
 		<div class="buttonsTable">
-			<form:form method="post" modelAttribute="zipCodeForm"
-				action="processForm">
+			
 				<table>
 					<tr>
 						<td align="right">Zip Code:</td>
@@ -50,12 +49,15 @@
 						<td><input type="submit" value="Submit" /></td>
 					</tr>
 				</table>
-			</form:form>
+			
 		</div>
 
 		<br /> <br />
+		<table>
+		<tr>
 		<c:choose>
 			<c:when test="${!empty zipCodeForm.zipCodes}">
+			<td>
 				<div class="tableContainer">
 					<table id="homeTable">
 						<thead class="fixedHeader">
@@ -73,7 +75,10 @@
 						<tbody>
 							<c:forEach var="zipCode" items="${zipCodeForm.zipCodes}" varStatus="loop">
 								<tr>
-									<td><input type="checkbox" name="checkboxgroup" value="c:out value='${zipCode}'"/></td>
+									<td>
+											<form:checkbox path="selectedZipCodes" value="${zipCode.zipCode}"/>
+									</td>
+									
 									<td><c:out value="${zipCode.zipCode}" /></td>
 									<td><c:out value="${zipCode.avgHouseValue}" /></td>
 									<td><c:out value="${zipCode.householdIncome}" /></td>
@@ -86,13 +91,13 @@
 						</tbody>
 					</table>
 				</div>
+				</td>
+				<td><input type="submit" value=">>" /></td>
 			</c:when>
 		</c:choose>
-
-		<br /> <br />
-
+		<td>
 		<c:choose>
-			<c:when test="${!empty zipCodeForm.routes}">
+			<c:when test="${!empty zipCodeForm.selectedRoutes}">
 				<div class="tableContainer">
 					<table id="homeTable">
 						<thead class="fixedHeader">
@@ -112,8 +117,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="route" items="${zipCodeForm.routes}" varStatus="loop">
-								<tr onclick="selectRow(${loop.index})">
+							<c:forEach var="route" items="${zipCodeForm.selectedRoutes}" varStatus="loop">
+								<tr>
 									<td><input type="checkbox" name="checkboxgroup" value="c:out value='${route}'"/></td>
 									<td><c:out value="${route.zipCode}" /></td>
 									<td><c:out value="${route.route}" /></td>
@@ -133,10 +138,62 @@
 				</div>
 			</c:when>
 		</c:choose>
+		</td>
+		</tr>
+		</table>
+
+		<br /> <br />
+
+		<c:choose>
+			<c:when test="${!empty zipCodeForm.zipCodes}">
+				<div class="tableContainer">
+					<table id="homeTable">
+						<thead class="fixedHeader">
+							<tr>
+								<th></th>
+								<th>Zip Code</th>
+								<th>Route</th>
+								<th>Type of Route</th>
+								<th>County Code</th>
+								<th>Business Count</th>
+								<th>Apartment Count</th>
+								<th>PO Box Count</th>
+								<th>Residential Count</th>
+								<th>Total Deliveries</th>
+								<th>Avg Household Income</th>
+								<th>Avg Property Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="zipCode" items="${zipCodeForm.zipCodes}" varStatus="loop">
+								<c:forEach var="route" items="${zipCode.routes}" varStatus="innerLoop">
+									<tr>
+										<td><input type="checkbox" name="checkboxgroup" value="c:out value='${route}'"/></td>
+										<td><c:out value="${route.zipCode}" /></td>
+										<td><c:out value="${route.route}" /></td>
+										<td><c:out value="${route.type}" /></td>
+										<td><c:out value="${route.countyCode}" /></td>
+										<td><c:out value="${route.businessCount}" /></td>
+										<td><c:out value="${route.apartmentCount}" /></td>
+										<td><c:out value="${route.poBoxCount}" /></td>
+										<td><c:out value="${route.residentialCount}" /></td>
+										<td><c:out value="${route.totalDeliveries}" /></td>
+										<td><c:out value="${route.avgHouseholdIncome}" /></td>
+										<td><c:out value="${route.avgPropertyValue}" /></td>
+									</tr>
+								</c:forEach>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</c:when>
+		</c:choose>
 	</div>
 	<br />
 	<br />
-
+	
+	</form:form>
+	
 	<script type="text/javascript"
 		src="webjars/bootstrap/3.3.7/js/bootstrap.min.js">
 	</script>

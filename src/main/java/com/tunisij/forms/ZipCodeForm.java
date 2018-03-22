@@ -2,7 +2,6 @@ package com.tunisij.forms;
 
 import java.util.List;
 
-import com.tunisij.businessObjects.RouteBO;
 import com.tunisij.businessObjects.ZipCodeBO;
 
 public class ZipCodeForm {
@@ -10,7 +9,8 @@ public class ZipCodeForm {
 	private Integer zipCode;
 	private Integer distance;
 	private List<ZipCodeBO> zipCodes;
-	private List<RouteBO> routes;
+	private List<String> selectedRoutes;
+	private List<String> selectedZipCodes;
 	private Double price;
 	private Double budget;
 
@@ -38,14 +38,6 @@ public class ZipCodeForm {
 		this.zipCodes = zipCodes;
 	}
 
-	public List<RouteBO> getRoutes() {
-		return routes;
-	}
-
-	public void setRoutes(List<RouteBO> routes) {
-		this.routes = routes;
-	}
-
 	public Integer getZipCode() {
 		return zipCode;
 	}
@@ -60,6 +52,22 @@ public class ZipCodeForm {
 
 	public void setDistance(Integer distance) {
 		this.distance = distance;
+	}
+
+	public List<String> getSelectedRoutes() {
+		return selectedRoutes;
+	}
+
+	public void setSelectedRoutes(List<String> selectedRoutes) {
+		this.selectedRoutes = selectedRoutes;
+	}
+
+	public List<String> getSelectedZipCodes() {
+		return selectedZipCodes;
+	}
+
+	public void setSelectedZipCodes(List<String> selectedZipCodes) {
+		this.selectedZipCodes = selectedZipCodes;
 	}
 
 }

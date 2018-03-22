@@ -1,5 +1,7 @@
 package com.tunisij.businessObjects;
 
+import java.util.List;
+
 public class ZipCodeBO implements Comparable<ZipCodeBO> {
 
 	private Integer zipCode;
@@ -9,6 +11,7 @@ public class ZipCodeBO implements Comparable<ZipCodeBO> {
 	private Double medianAge;
 	private Integer numBusinesses;
 	private Integer numEmployees;
+	private List<RouteBO> routes;
 
 	public ZipCodeBO(Integer zipCode) {
 		this.zipCode = zipCode;
@@ -66,6 +69,14 @@ public class ZipCodeBO implements Comparable<ZipCodeBO> {
 		this.numEmployees = numEmployees;
 	}
 	
+	public List<RouteBO> getRoutes() {
+		return routes;
+	}
+
+	public void setRoutes(List<RouteBO> routes) {
+		this.routes = routes;
+	}
+
 	public String toString() {
 		return "Zip Code: " + zipCode +
 				"\nAverage House Value: " + avgHouseValue +

@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,13 +34,22 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST)
-	public ModelAndView processForm(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
-		List<ZipCodeBO> zipCodes = zipCodeService.getZipCodes(form.getZipCode(), form.getDistance());
-		Collections.sort(zipCodes);
+	public ModelAndView processForm(@ModelAttribute("zipCodeForm") ZipCodeForm form, BindingResult bind) {
+		List<ZipCodeBO> zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
 		
+		separateSelectedRoutes(form.getSelectedZipCodes(), zipCodes);
+		
+		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setRoutes(routeService.getRoutes(zipCodes));
 		return new ModelAndView("welcome", "zipCodeForm", form);
+	}
+	
+	private void separateSelectedRoutes(List<String> selectedZipCodes, List<ZipCodeBO> zipCodes) {
+		for (ZipCodeBO zipCodeBO : zipCodes) {
+			if (selectedZipCodes.contains(zipCodeBO.getZipCode().toString())) {
+				
+			}
+		}
 	}
 	
 }

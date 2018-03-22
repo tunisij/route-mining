@@ -1,6 +1,5 @@
 package com.tunisij.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,12 @@ public class RouteService {
 		return routes;
 	}
 	
-	public List<RouteBO> getRoutes(List<ZipCodeBO> zipCodes) {
-		List<RouteBO> routes = new ArrayList<>();
+	public List<ZipCodeBO> populateRoutesForZipCodes(List<ZipCodeBO> zipCodes) {
 		for (ZipCodeBO zipCode : zipCodes) {
-			routes.addAll(getRoutes(zipCode.getZipCode()));
+			zipCode.setRoutes(getRoutes(zipCode.getZipCode()));
 		}
-		return routes;
+		
+		return zipCodes;
 	}
 
 }
