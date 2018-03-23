@@ -2,6 +2,7 @@ package com.tunisij.forms;
 
 import java.util.List;
 
+import com.tunisij.businessObjects.RouteBO;
 import com.tunisij.businessObjects.ZipCodeBO;
 
 public class ZipCodeForm {
@@ -9,10 +10,14 @@ public class ZipCodeForm {
 	private Integer zipCode;
 	private Integer distance;
 	private List<ZipCodeBO> zipCodes;
-	private List<String> selectedRoutes;
+	private List<RouteBO> selectedRoutesList;
 	private List<String> selectedZipCodes;
 	private Double price;
 	private Double budget;
+	private Integer houseValueLower;
+	private Integer houseValueUpper;
+	private Integer incomeLower;
+	private Integer incomeUpper;
 
 	public Double getPrice() {
 		return price;
@@ -54,12 +59,12 @@ public class ZipCodeForm {
 		this.distance = distance;
 	}
 
-	public List<String> getSelectedRoutes() {
-		return selectedRoutes;
+	public List<RouteBO> getSelectedRoutesList() {
+		return selectedRoutesList;
 	}
 
-	public void setSelectedRoutes(List<String> selectedRoutes) {
-		this.selectedRoutes = selectedRoutes;
+	public void setSelectedRoutesList(List<RouteBO> selectedRoutesList) {
+		this.selectedRoutesList = selectedRoutesList;
 	}
 
 	public List<String> getSelectedZipCodes() {
@@ -68,6 +73,38 @@ public class ZipCodeForm {
 
 	public void setSelectedZipCodes(List<String> selectedZipCodes) {
 		this.selectedZipCodes = selectedZipCodes;
+	}
+
+	public Integer getHouseValueLower() {
+		return houseValueLower;
+	}
+
+	public void setHouseValueLower(Integer houseValueLower) {
+		this.houseValueLower = houseValueLower;
+	}
+
+	public Integer getHouseValueUpper() {
+		return houseValueUpper;
+	}
+
+	public void setHouseValueUpper(Integer houseValueUpper) {
+		this.houseValueUpper = houseValueUpper;
+	}
+
+	public Integer getIncomeLower() {
+		return incomeLower;
+	}
+
+	public void setIncomeLower(Integer incomeLower) {
+		this.incomeLower = incomeLower;
+	}
+
+	public Integer getIncomeUpper() {
+		return incomeUpper;
+	}
+
+	public void setIncomeUpper(Integer incomeUpper) {
+		this.incomeUpper = incomeUpper;
 	}
 
 }
