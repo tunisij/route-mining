@@ -65,7 +65,7 @@
 		<c:choose>
 			<c:when test="${!empty zipCodeForm.zipCodes}">
 			<td>
-				<div class="tableContainer">
+				<div class="tableContainerZipCodes">
 					<table id="homeTable">
 						<thead class="fixedHeader">
 							<tr>
@@ -97,7 +97,7 @@
 				</div>
 				<td><input type="submit" name="rightArrow" value="&gt;&gt;" /></td>
 		<td>
-				<div class="tableContainer">
+				<div class="tableContainerRoutes">
 					<table id="homeTable">
 						<thead class="fixedHeader">
 							<tr>
@@ -116,9 +116,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="route" items="${zipCodeForm.selectedRoutesList}" varStatus="loop">
+							<c:forEach var="route" items="${zipCodeForm.routes}" varStatus="loop">
 								<tr>
-									<td><input type="checkbox" name="checkboxgroup" value="c:out value='${route}'"/></td>
+									<td><form:checkbox path="selectedRoutes" value="${route.key}"/></td>
 									<td><c:out value="${route.zipCode}" /></td>
 									<td><c:out value="${route.route}" /></td>
 									<td><c:out value="${route.type}" /></td>
@@ -161,12 +161,20 @@ html, body {
 	height: 100%;
 }
 
-div.tableContainer {
+div.tableContainerZipCodes {
 	clear: both;
 	border: 1px solid #963;
-	height: 500px;
 	overflow: auto;
-	width: 500px;
+	height: 500px;
+	width: 400px;
+}
+
+div.tableContainerRoutes {
+	clear: both;
+	border: 1px solid #963;
+	overflow: auto;
+	height: 500px;
+	width: 850px;
 }
 
 div.buttonsTable td {

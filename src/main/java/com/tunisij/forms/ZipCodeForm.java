@@ -10,8 +10,9 @@ public class ZipCodeForm {
 	private Integer zipCode;
 	private Integer distance;
 	private List<ZipCodeBO> zipCodes;
-	private List<RouteBO> selectedRoutesList;
+	private List<RouteBO> routes;
 	private List<String> selectedZipCodes;
+	private List<String> selectedRoutes;
 	private Double price;
 	private Double budget;
 	private Integer houseValueLower;
@@ -59,12 +60,12 @@ public class ZipCodeForm {
 		this.distance = distance;
 	}
 
-	public List<RouteBO> getSelectedRoutesList() {
-		return selectedRoutesList;
+	public List<RouteBO> getRoutes() {
+		return routes;
 	}
 
-	public void setSelectedRoutesList(List<RouteBO> selectedRoutesList) {
-		this.selectedRoutesList = selectedRoutesList;
+	public void setRoutes(List<RouteBO> routes) {
+		this.routes = routes;
 	}
 
 	public List<String> getSelectedZipCodes() {
@@ -73,6 +74,14 @@ public class ZipCodeForm {
 
 	public void setSelectedZipCodes(List<String> selectedZipCodes) {
 		this.selectedZipCodes = selectedZipCodes;
+	}
+	
+	public List<String> getSelectedRoutes() {
+		return selectedRoutes;
+	}
+
+	public void setSelectedRoutes(List<String> selectedRoutes) {
+		this.selectedRoutes = selectedRoutes;
 	}
 
 	public Integer getHouseValueLower() {

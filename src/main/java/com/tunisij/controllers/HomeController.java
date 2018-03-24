@@ -9,7 +9,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +46,7 @@ public class HomeController {
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setSelectedRoutesList(separatedRoutes.get(SELECTED));
+		form.setRoutes(separatedRoutes.get(SELECTED));
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
@@ -59,19 +58,24 @@ public class HomeController {
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setSelectedRoutesList(separatedRoutes.get(SELECTED));
+		form.setRoutes(separatedRoutes.get(SELECTED));
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST, params="autoSelect")
 	public ModelAndView autoSelect(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
 		List<ZipCodeBO> zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		List<String> selectedKeys = autoSelectRoutes(form, zipCodes);
 		
-		Map<String, List<RouteBO>> separatedRoutes = separateSelectedRoutes(form.getSelectedZipCodes(), zipCodes);
+		//maybe use the builder pattern for autoSelectRoutes?
+		//maybe use decorator for house value range and income range have value?
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setSelectedRoutesList(separatedRoutes.get(SELECTED));
+		form.setRoutes(getRoutesByKey(selectedKeys, zipCodes));
+		form.setSelectedZipCodes(getSelectedZipCodesByKey(selectedKeys));
+		form.setSelectedRoutes(selectedKeys);
+		
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
@@ -83,8 +87,95 @@ public class HomeController {
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setSelectedRoutesList(separatedRoutes.get(SELECTED));
+		form.setRoutes(separatedRoutes.get(SELECTED));
 		return new ModelAndView("welcome", "zipCodeForm", form);
+	}
+	
+	private List<String> getSelectedZipCodesByKey(List<String> selectedKeys) {
+		List<String> zipCodes = new ArrayList<>();
+		
+		for (String key : selectedKeys) {
+			String zipCode = key.substring(0, key.indexOf(":"));
+			if (!zipCodes.contains(zipCode)) {
+				zipCodes.add(zipCode);
+			}
+		}
+		
+		return zipCodes;
+	}
+	
+	private List<RouteBO> getRoutesByKey(List<String> selectedKeys, List<ZipCodeBO> zipCodes) {
+		List<RouteBO> routes = new ArrayList<>();
+		
+		for (ZipCodeBO zipCodeBO : zipCodes) {
+			for (RouteBO routeBO : zipCodeBO.getRoutes()) {
+				if (selectedKeys.contains(routeBO.getKey())) {
+					routes.addAll(zipCodeBO.getRoutes());
+					break;
+				}
+			}
+		}
+		
+		return routes;
+	}
+	
+	private List<String> autoSelectRoutes(ZipCodeForm form, List<ZipCodeBO> zipCodes) {
+		List<String> selectedRoutes = new ArrayList<>();
+		Double selectedPriceTotal = 0.0;
+		Double budget = form.getBudget();
+		Double price = form.getPrice();
+		
+		if (budget == null || price == null) {
+			return selectedRoutes;
+		}
+		
+		for (ZipCodeBO zipCodeBO : zipCodes) {
+			for (RouteBO routeBO : zipCodeBO.getRoutes()) {
+				if (isIncomeValid(form, routeBO.getAvgHouseholdIncome()) && isPropertyValueValid(form, routeBO.getAvgPropertyValue())) {
+					if (budget - (selectedPriceTotal + (price * routeBO.getTotalDeliveries())) > 0.0) {
+						selectedRoutes.add(routeBO.getKey());
+						selectedPriceTotal += price * routeBO.getTotalDeliveries();
+					}
+				}
+			}
+		}
+		
+		return selectedRoutes;
+		
+	}
+	
+	private boolean isIncomeValid(ZipCodeForm form, Integer avgHouseholdIncome) {
+		Integer incomeLower = form.getIncomeLower();
+		Integer incomeUpper = form.getIncomeUpper();
+		
+		if (incomeLower == null && incomeUpper == null) {
+			return true;
+		} else if (incomeLower != null && incomeUpper != null) {
+			return incomeLower <= avgHouseholdIncome && incomeUpper >= avgHouseholdIncome;
+		} else if (incomeLower != null) {
+			return incomeLower <= avgHouseholdIncome;
+		} else if (incomeUpper != null) {
+			return incomeUpper >= avgHouseholdIncome;
+		}
+		
+		return false;
+	}
+	
+	private boolean isPropertyValueValid(ZipCodeForm form, Integer avgHouseholdValue) {
+		Integer houseValueLower = form.getHouseValueLower();
+		Integer houseValueUpper = form.getHouseValueUpper();
+		
+		if (houseValueLower == null && houseValueUpper == null) {
+			return true;
+		} else if (houseValueLower != null && houseValueUpper != null) {
+			return houseValueLower <= avgHouseholdValue && houseValueUpper >= avgHouseholdValue;
+		} else if (houseValueLower != null) {
+			return houseValueLower <= avgHouseholdValue;
+		} else if (houseValueUpper != null) {
+			return houseValueUpper >= avgHouseholdValue;
+		}
+		
+		return false;
 	}
 	
 	private Map<String, List<RouteBO>> separateSelectedRoutes(List<String> selectedZipCodes, List<ZipCodeBO> zipCodes) {

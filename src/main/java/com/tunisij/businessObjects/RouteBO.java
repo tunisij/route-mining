@@ -18,6 +18,10 @@ public class RouteBO {
 		this.zipCode = zipCode;
 	}
 	
+	public String getKey() {
+		return zipCode + ":" + route;
+	}
+	
 	public Integer getZipCode() {
 		return zipCode;
 	}
