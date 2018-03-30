@@ -72,51 +72,11 @@ public class HomeController {
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setRoutes(getRoutesByKey(selectedKeys, zipCodes));
-		form.setSelectedZipCodes(getSelectedZipCodesByKey(selectedKeys));
+		form.setRoutes(routeService.getAllRoutesByKey(selectedKeys, zipCodes));
+		form.setSelectedZipCodes(zipCodeService.getSelectedZipCodesByKey(selectedKeys));
 		form.setSelectedRoutes(selectedKeys);
 		
 		return new ModelAndView("welcome", "zipCodeForm", form);
-	}
-	
-	@RequestMapping(value = "/processForm", method=RequestMethod.POST, params="generateReport")
-	public ModelAndView generateReport(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
-		List<ZipCodeBO> zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
-		
-		Map<String, List<RouteBO>> separatedRoutes = separateSelectedRoutes(form.getSelectedZipCodes(), zipCodes);
-		
-		Collections.sort(zipCodes);
-		form.setZipCodes(zipCodes);
-		form.setRoutes(separatedRoutes.get(SELECTED));
-		return new ModelAndView("welcome", "zipCodeForm", form);
-	}
-	
-	private List<String> getSelectedZipCodesByKey(List<String> selectedKeys) {
-		List<String> zipCodes = new ArrayList<>();
-		
-		for (String key : selectedKeys) {
-			String zipCode = key.substring(0, key.indexOf(":"));
-			if (!zipCodes.contains(zipCode)) {
-				zipCodes.add(zipCode);
-			}
-		}
-		
-		return zipCodes;
-	}
-	
-	private List<RouteBO> getRoutesByKey(List<String> selectedKeys, List<ZipCodeBO> zipCodes) {
-		List<RouteBO> routes = new ArrayList<>();
-		
-		for (ZipCodeBO zipCodeBO : zipCodes) {
-			for (RouteBO routeBO : zipCodeBO.getRoutes()) {
-				if (selectedKeys.contains(routeBO.getKey())) {
-					routes.addAll(zipCodeBO.getRoutes());
-					break;
-				}
-			}
-		}
-		
-		return routes;
 	}
 	
 	private List<String> autoSelectRoutes(ZipCodeForm form, List<ZipCodeBO> zipCodes) {
@@ -132,7 +92,7 @@ public class HomeController {
 		for (ZipCodeBO zipCodeBO : zipCodes) {
 			for (RouteBO routeBO : zipCodeBO.getRoutes()) {
 				if (isIncomeValid(form, routeBO.getAvgHouseholdIncome()) && isPropertyValueValid(form, routeBO.getAvgPropertyValue())) {
-					if (budget - (selectedPriceTotal + (price * routeBO.getTotalDeliveries())) > 0.0) {
+					if (Double.compare(budget - (selectedPriceTotal + (price * routeBO.getTotalDeliveries())), 0.0) >= 0) {
 						selectedRoutes.add(routeBO.getKey());
 						selectedPriceTotal += price * routeBO.getTotalDeliveries();
 					}

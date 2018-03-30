@@ -28,6 +28,7 @@
 			</div>
 		</div>
 	</nav>
+
 <form:form method="post" modelAttribute="zipCodeForm" action="processForm">
 	<div class="container">
 		<div class="buttonsTable">

@@ -33,7 +33,6 @@ public class RouteScraper extends BaseScraper {
 			Element element = document.getElementsByClass("Tableresultborder").first();
 			
 			if (element == null) {
-				//look for issue
 				return routeList;
 			}
 			
