@@ -1,5 +1,6 @@
 package com.tunisij.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import com.tunisij.businessObjects.ZipCodeBO;
 import com.tunisij.common.Strings;
 import com.tunisij.daos.RouteDAO;
 import com.tunisij.factories.DaoFactory;
-import com.tunisij.scrapers.RouteScraper;
+import com.tunisij.strategies.route.ExternalRouteStrategy;
+import com.tunisij.strategies.route.LocalRouteStrategy;
+import com.tunisij.strategies.route.RouteContext;
 
 @Service
 public class RouteService {
@@ -19,7 +22,13 @@ public class RouteService {
 	@Autowired
 	private DaoFactory factory;
 	
-	public List<ZipCodeBO> populateRoutesForZipCodes(List<ZipCodeBO> zipCodes) {
+	@Autowired
+	private LocalRouteStrategy localRouteStrategy;
+	
+	@Autowired
+	private ExternalRouteStrategy externalRouteStrategy;
+	
+	public List<ZipCodeBO> populateRoutesForZipCodes(List<ZipCodeBO> zipCodes) throws IOException {
 		for (ZipCodeBO zipCode : zipCodes) {
 			zipCode.setRoutes(getRoutes(zipCode.getZipCode()));
 		}
@@ -56,12 +65,14 @@ public class RouteService {
 		return routes;
 	}
 	
-	private List<RouteBO> getRoutes(Integer zipCode) {
+	private List<RouteBO> getRoutes(Integer zipCode) throws IOException {
 		RouteDAO routeDAO = ((RouteDAO) factory.getDAO(Strings.ROUTE_DAO));
-		List<RouteBO> routes = routeDAO.getRoutes(zipCode);
+		RouteContext localContext = new RouteContext(localRouteStrategy);
+		RouteContext externalContext = new RouteContext(externalRouteStrategy);
+		List<RouteBO> routes = localContext.executeFetch(zipCode);
 		
 		if (routes.isEmpty()) {
-			routes = new RouteScraper().getRoutesForZipCode(zipCode);
+			externalContext.executeFetch(zipCode);
 			routeDAO.insertRoutes(routes);
 		}
 		

@@ -1,5 +1,6 @@
 package com.tunisij.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,9 @@ import com.tunisij.common.Strings;
 import com.tunisij.daos.ZipCodeDAO;
 import com.tunisij.factories.DaoFactory;
 import com.tunisij.scrapers.ZipCodeScraper;
+import com.tunisij.strategies.zipCode.ExternalZipCodeStrategy;
+import com.tunisij.strategies.zipCode.LocalZipCodeStrategy;
+import com.tunisij.strategies.zipCode.ZipCodeContext;
 
 @Service
 public class ZipCodeService {
@@ -18,20 +22,28 @@ public class ZipCodeService {
 	@Autowired
 	private DaoFactory factory;
 	
-	public List<ZipCodeBO> getZipCodes(Integer zipCode, Integer distance) {
+	@Autowired
+	private LocalZipCodeStrategy localZipCodeStrategy;
+	
+	@Autowired
+	private ExternalZipCodeStrategy externalZipCodeStrategy;
+	
+	public List<ZipCodeBO> getZipCodes(Integer zipCode, Integer distance) throws IOException {
 		return getZipCodes(zipCode, distance, null);
 	}
 	
-	public List<ZipCodeBO> getZipCodes(Integer zipCode, Integer distance, List<String> selectedZipCodes) {
+	public List<ZipCodeBO> getZipCodes(Integer zipCode, Integer distance, List<String> selectedZipCodes) throws IOException {
 		List<ZipCodeBO> zipCodes = new ArrayList<>();
+		ZipCodeContext localContext = new ZipCodeContext(localZipCodeStrategy);
+		ZipCodeContext externalContext = new ZipCodeContext(externalZipCodeStrategy);
 		ZipCodeDAO zipCodeDAO = (ZipCodeDAO) factory.getDAO(Strings.ZIP_CODE_DAO);
 		
 		for (Integer zip : getZipCodesInRadius(zipCode, distance)) {
 			if (selectedZipCodes == null || selectedZipCodes.isEmpty() || selectedZipCodes.contains(zip.toString())) {
-				ZipCodeBO z = zipCodeDAO.getZipCode(zip);
+				ZipCodeBO z = localContext.executeFetch(zip);
 				
 				if (z == null) {
-					z = getZipCodeData(zip);
+					z = externalContext.executeFetch(zip);
 					zipCodeDAO.insert(z);
 				}
 				
@@ -53,10 +65,6 @@ public class ZipCodeService {
 		}
 		
 		return zipCodes;
-	}
-	
-	private ZipCodeBO getZipCodeData(Integer zipCode) {
-		return new ZipCodeScraper().getZipCodeData(zipCode);
 	}
 	
 	private List<Integer> getZipCodesInRadius(Integer zipCode, Integer distance) {

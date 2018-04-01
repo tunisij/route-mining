@@ -1,5 +1,6 @@
 package com.tunisij.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tunisij.businessObjects.RouteBO;
 import com.tunisij.businessObjects.ZipCodeBO;
+import com.tunisij.common.Strings;
 import com.tunisij.forms.ZipCodeForm;
 import com.tunisij.services.RouteService;
 import com.tunisij.services.ZipCodeService;
@@ -29,9 +31,6 @@ public class HomeController {
 	@Autowired
 	private ZipCodeService zipCodeService;
 	
-	private static final String SELECTED = "SELECTED";
-	private static final String UNSELECTED = "UNSELECTED";
-	
 	@RequestMapping("/")
 	public String welcomeHome(Model model) {
 		model.addAttribute("zipCodeForm", new ZipCodeForm());
@@ -40,31 +39,46 @@ public class HomeController {
 	
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST)
 	public ModelAndView processForm(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
-		List<ZipCodeBO> zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		List<ZipCodeBO> zipCodes = new ArrayList<>();
+		try {
+			zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		} catch (IOException e) {
+			form.setErrors(Strings.MELISSA_DATA_ERROR);
+		}
 		
 		Map<String, List<RouteBO>> separatedRoutes = separateSelectedRoutes(form.getSelectedZipCodes(), zipCodes);
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setRoutes(separatedRoutes.get(SELECTED));
+		form.setRoutes(separatedRoutes.get(Strings.SELECTED));
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST, params="rightArrow")
 	public ModelAndView rightArrow(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
-		List<ZipCodeBO> zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		List<ZipCodeBO> zipCodes = new ArrayList<>();
+		try {
+			zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		} catch (IOException e) {
+			form.setErrors(Strings.MELISSA_DATA_ERROR);
+		}
 		
 		Map<String, List<RouteBO>> separatedRoutes = separateSelectedRoutes(form.getSelectedZipCodes(), zipCodes);
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);
-		form.setRoutes(separatedRoutes.get(SELECTED));
+		form.setRoutes(separatedRoutes.get(Strings.SELECTED));
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST, params="autoSelect")
 	public ModelAndView autoSelect(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
-		List<ZipCodeBO> zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		List<ZipCodeBO> zipCodes = new ArrayList<>();
+		try {
+			zipCodes = routeService.populateRoutesForZipCodes(zipCodeService.getZipCodes(form.getZipCode(), form.getDistance()));
+		} catch (IOException e) {
+			form.setErrors(Strings.MELISSA_DATA_ERROR);
+		}
 		List<String> selectedKeys = autoSelectRoutes(form, zipCodes);
 		
 		//maybe use the builder pattern for autoSelectRoutes?
@@ -155,8 +169,8 @@ public class HomeController {
 			}
 		}
 		
-		separatedRoutes.put(SELECTED, selected);
-		separatedRoutes.put(UNSELECTED, unselected);
+		separatedRoutes.put(Strings.SELECTED, selected);
+		separatedRoutes.put(Strings.UNSELECTED, unselected);
 		
 		return separatedRoutes;
 	}

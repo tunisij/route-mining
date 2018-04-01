@@ -2,9 +2,15 @@ package com.tunisij.businessObjects;
 
 import java.util.List;
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
+
+@Data
+@Builder
 public class ZipCodeBO implements Comparable<ZipCodeBO> {
 
-	private Integer zipCode;
+	@NonNull private Integer zipCode;
 	private Integer population;
 	private Integer avgHouseValue;
 	private Integer householdIncome;
@@ -12,80 +18,6 @@ public class ZipCodeBO implements Comparable<ZipCodeBO> {
 	private Integer numBusinesses;
 	private Integer numEmployees;
 	private List<RouteBO> routes;
-
-	public ZipCodeBO(Integer zipCode) {
-		this.zipCode = zipCode;
-	}
-	
-	public Integer getZipCode() {
-		return zipCode;
-	}
-
-	public Integer getPopulation() {
-		return population;
-	}
-
-	public void setPopulation(Integer population) {
-		this.population = population;
-	}
-
-	public Integer getAvgHouseValue() {
-		return avgHouseValue;
-	}
-
-	public void setAvgHouseValue(Integer avgHouseValue) {
-		this.avgHouseValue = avgHouseValue;
-	}
-
-	public Integer getHouseholdIncome() {
-		return householdIncome;
-	}
-
-	public void setHouseholdIncome(Integer householdIncome) {
-		this.householdIncome = householdIncome;
-	}
-
-	public Double getMedianAge() {
-		return medianAge;
-	}
-
-	public void setMedianAge(Double medianAge) {
-		this.medianAge = medianAge;
-	}
-
-	public Integer getNumBusinesses() {
-		return numBusinesses;
-	}
-
-	public void setNumBusinesses(Integer numBusinesses) {
-		this.numBusinesses = numBusinesses;
-	}
-
-	public Integer getNumEmployees() {
-		return numEmployees;
-	}
-
-	public void setNumEmployees(Integer numEmployees) {
-		this.numEmployees = numEmployees;
-	}
-	
-	public List<RouteBO> getRoutes() {
-		return routes;
-	}
-
-	public void setRoutes(List<RouteBO> routes) {
-		this.routes = routes;
-	}
-
-	public String toString() {
-		return "Zip Code: " + zipCode +
-				"\nAverage House Value: " + avgHouseValue +
-				"\nHousehold Income: " + householdIncome +
-				"\nMedian Age: " + medianAge +
-				"\nNum Businesses: " + numBusinesses + 
-				"\nNum Employees: " + numEmployees +
-				"\nPopulation: " + population + "\n";
-	}
 
 	@Override
 	public int compareTo(ZipCodeBO zipCodeBO) {

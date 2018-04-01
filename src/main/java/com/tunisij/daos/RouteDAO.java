@@ -73,17 +73,19 @@ public class RouteDAO extends BaseDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				RouteBO routeBO = new RouteBO(zipCode);
-				routeBO.setApartmentCount(rs.getInt("apartment_count"));
-				routeBO.setAvgHouseholdIncome(rs.getInt("avg_household_income"));
-				routeBO.setAvgPropertyValue(rs.getInt("avg_property_value"));
-				routeBO.setBusinessCount(rs.getInt("business_count"));
-				routeBO.setCountyCode(rs.getString("county_code"));
-				routeBO.setPoBoxCount(rs.getInt("po_box_count"));
-				routeBO.setResidentialCount(rs.getInt("residential_count"));
-				routeBO.setRoute(rs.getString("route"));
-				routeBO.setTotalDeliveries(rs.getInt("total_deliveries"));
-				routeBO.setType(rs.getString("type"));
+				RouteBO routeBO = RouteBO.builder()
+						.zipCode(zipCode)
+						.apartmentCount(rs.getInt("apartment_count"))
+						.avgHouseholdIncome(rs.getInt("avg_household_income"))
+						.avgPropertyValue(rs.getInt("avg_property_value"))
+						.businessCount(rs.getInt("business_count"))
+						.countyCode(rs.getString("county_code"))
+						.poBoxCount(rs.getInt("po_box_count"))
+						.residentialCount(rs.getInt("residential_count"))
+						.route(rs.getString("route"))
+						.totalDeliveries(rs.getInt("total_deliveries"))
+						.type(rs.getString("type"))
+						.build();
 				routes.add(routeBO);
 			}
 		} catch (SQLException e) {

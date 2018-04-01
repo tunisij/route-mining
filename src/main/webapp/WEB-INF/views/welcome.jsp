@@ -55,6 +55,12 @@
 				</table>
 		</div>
 
+		<c:choose>
+			<c:when test="${!empty zipCodeForm.errors}">
+				<div id="errors"><c:out value="${zipCodeForm.errors}" /></div>
+			</c:when>
+		</c:choose>
+
 		<table>
 		<tr>
 			<td style="padding: 5px 0px 5px 0px" align="right" colspan="4">
@@ -181,6 +187,11 @@ div.tableContainerRoutes {
 div.buttonsTable td {
 	padding: 2px;
 }
+
+#errors {
+	color: red;
+}
+
 
 #homeTable {
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;

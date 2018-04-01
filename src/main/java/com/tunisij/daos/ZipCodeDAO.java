@@ -58,13 +58,15 @@ public class ZipCodeDAO extends BaseDAO {
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				zipCodeBO = new ZipCodeBO(zipCode);
-				zipCodeBO.setAvgHouseValue(rs.getInt("avg_house_value"));
-				zipCodeBO.setHouseholdIncome(rs.getInt("household_income"));
-				zipCodeBO.setMedianAge(rs.getDouble("median_age"));
-				zipCodeBO.setNumBusinesses(rs.getInt("num_business"));
-				zipCodeBO.setNumEmployees(rs.getInt("num_employee"));
-				zipCodeBO.setPopulation(rs.getInt("population"));
+				zipCodeBO = ZipCodeBO.builder()
+						.zipCode(zipCode)
+						.avgHouseValue(rs.getInt("avg_house_value"))
+						.householdIncome(rs.getInt("household_income"))
+						.medianAge(rs.getDouble("median_age"))
+						.numBusinesses(rs.getInt("num_business"))
+						.numEmployees(rs.getInt("num_employee"))
+						.population(rs.getInt("population"))
+						.build();
 			}
 		} catch (SQLException e) {
 			logger.log(e.getMessage(), e);
@@ -74,5 +76,5 @@ public class ZipCodeDAO extends BaseDAO {
 		
 		return zipCodeBO;
 	}
-
+	
 }
