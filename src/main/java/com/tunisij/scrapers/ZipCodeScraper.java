@@ -11,19 +11,13 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import com.tunisij.businessObjects.ZipCodeBO;
+import com.tunisij.common.Strings;
 
 public class ZipCodeScraper extends BaseScraper {
 	
-	private static final String ZIP_RADIUS_URL = "https://www.searchbug.com/tools/zip-radius.aspx?";
-	private static final String ZIP_CODE_LOOKUP_URL = "https://www.searchbug.com/tools/zip-code-lookup.aspx?";
-	private static final String TYPE_ZIP_RADIUS = "TYPE=zipradius";
-	private static final String TYPE_ZIP_2_CITY = "TYPE=zip2city";
-	private static final String ZIP_SEARCH = "&ZIP=";
-	private static final String DIST_SEARCH = "&DIST=";
-	
 	public ZipCodeBO getZipCodeData(Integer zipCodeInt) throws IOException {
 		ZipCodeBO zipCodeBO = ZipCodeBO.builder().zipCode(zipCodeInt).build();
-		String fullUrl = ZIP_CODE_LOOKUP_URL + TYPE_ZIP_2_CITY + ZIP_SEARCH + zipCodeInt;
+		String fullUrl = Strings.ZIP_CODE_LOOKUP_URL + Strings.TYPE_ZIP_2_CITY + Strings.ZIP_SEARCH + zipCodeInt;
 		Document document = null;
 		
 		document = Jsoup.connect(fullUrl).timeout(0).get();
@@ -52,7 +46,7 @@ public class ZipCodeScraper extends BaseScraper {
 	
 	public List<Integer> getZipCodesInRadius(Integer zipCode, Integer distance) {
 		List<Integer> zipCodes = new ArrayList<>();
-		String fullUrl = ZIP_RADIUS_URL + TYPE_ZIP_RADIUS + ZIP_SEARCH + zipCode + DIST_SEARCH + distance;
+		String fullUrl = Strings.ZIP_RADIUS_URL + Strings.TYPE_ZIP_RADIUS + Strings.ZIP_SEARCH + zipCode + Strings.DIST_SEARCH + distance;
 		Document document = null;
 		try {
 			document = Jsoup.connect(fullUrl).timeout(0).get();

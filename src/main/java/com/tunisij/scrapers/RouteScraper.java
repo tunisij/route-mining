@@ -11,11 +11,10 @@ import org.jsoup.select.Elements;
 
 import com.tunisij.businessObjects.RouteBO;
 import com.tunisij.businessObjects.ZipCodeBO;
+import com.tunisij.common.Strings;
 
 public class RouteScraper extends BaseScraper {
 	
-	private static final String SITE_URL = "http://www.melissadata.com/lookups/MapCartS.asp?zip=";
-
 	public List<RouteBO> getRoutesForZipCodes(List<ZipCodeBO> zipCodes) throws IOException {
 		List<RouteBO> routes = new ArrayList<>();
 		for (ZipCodeBO zipCodeBO : zipCodes) {
@@ -28,7 +27,7 @@ public class RouteScraper extends BaseScraper {
 		List<RouteBO> routeList = new ArrayList<>();
 		Document document = null;
 		
-		document = Jsoup.connect(SITE_URL + zipCode).timeout(0).get();
+		document = Jsoup.connect(Strings.SITE_URL + zipCode).timeout(0).get();
 		Element element = document.getElementsByClass("Tableresultborder").first();
 		
 		if (element == null) {
