@@ -10,6 +10,7 @@ import com.tunisij.common.Strings;
 import com.tunisij.daos.RouteDAO;
 import com.tunisij.factories.DaoFactory;
 
+//Implementation of routeStrategy
 @Service
 public class LocalRouteStrategy implements RouteStrategy {
 

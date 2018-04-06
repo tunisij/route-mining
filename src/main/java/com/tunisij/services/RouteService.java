@@ -65,6 +65,7 @@ public class RouteService {
 		return routes;
 	}
 	
+	//Tries local strategy first. If local returns no data, executes external strategy
 	private List<RouteBO> getRoutes(Integer zipCode) throws IOException {
 		RouteDAO routeDAO = ((RouteDAO) factory.getDAO(Strings.ROUTE_DAO));
 		RouteContext localContext = new RouteContext(localRouteStrategy);

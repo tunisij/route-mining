@@ -32,6 +32,7 @@ public class ZipCodeService {
 		return getZipCodes(zipCode, distance, null);
 	}
 	
+	//Tries local strategy first. If local returns no data, executes external strategy
 	public List<ZipCodeBO> getZipCodes(Integer zipCode, Integer distance, List<String> selectedZipCodes) throws IOException {
 		List<ZipCodeBO> zipCodes = new ArrayList<>();
 		ZipCodeContext localContext = new ZipCodeContext(localZipCodeStrategy);

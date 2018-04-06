@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.tunisij.businessObjects.RouteBO;
 
+//Context for strategy pattern executes generic routeStrategy
 public class RouteContext {
 
 	private RouteStrategy strategy;

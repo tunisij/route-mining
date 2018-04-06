@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.tunisij.businessObjects.ZipCodeBO;
 
+//Context for strategy pattern executes generic zipCodeStrategy
 public class ZipCodeContext {
 	private ZipCodeStrategy strategy;
 	

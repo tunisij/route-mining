@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.tunisij.businessObjects.ZipCodeBO;
 import com.tunisij.scrapers.ZipCodeScraper;
 
+//Implementation of zipCodeStrategy
 @Service
 public class ExternalZipCodeStrategy implements ZipCodeStrategy {
 

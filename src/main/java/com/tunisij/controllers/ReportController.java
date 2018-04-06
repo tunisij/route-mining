@@ -19,6 +19,7 @@ import com.tunisij.forms.ZipCodeForm;
 import com.tunisij.services.RouteService;
 import com.tunisij.services.ZipCodeService;
 
+//Controller of Spring MVC architecture
 @Controller
 public class ReportController {
 
@@ -28,6 +29,7 @@ public class ReportController {
 	@Autowired
 	private ZipCodeService zipCodeService;
 
+	//Generates the report page
 	@RequestMapping(value = "/processForm", method = RequestMethod.POST, params = "generateReport")
 	public ModelAndView generateReport(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
 		ReportForm reportForm = new ReportForm();

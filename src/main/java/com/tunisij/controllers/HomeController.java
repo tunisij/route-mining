@@ -22,6 +22,7 @@ import com.tunisij.forms.ZipCodeForm;
 import com.tunisij.services.RouteService;
 import com.tunisij.services.ZipCodeService;
 
+//Controller of Spring MVC architecture
 @Controller
 public class HomeController {
 	
@@ -37,6 +38,7 @@ public class HomeController {
 		return "welcome";
 	}
 	
+	//Populates tables based on inputs
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST)
 	public ModelAndView processForm(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
 		List<ZipCodeBO> zipCodes = new ArrayList<>();
@@ -54,6 +56,7 @@ public class HomeController {
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
+	//Moves routes into right table from the selected zipCodes on the left side
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST, params="rightArrow")
 	public ModelAndView rightArrow(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
 		List<ZipCodeBO> zipCodes = new ArrayList<>();
@@ -71,6 +74,7 @@ public class HomeController {
 		return new ModelAndView("welcome", "zipCodeForm", form);
 	}
 	
+	//Autoselects routes based on parameters
 	@RequestMapping(value = "/processForm", method=RequestMethod.POST, params="autoSelect")
 	public ModelAndView autoSelect(@ModelAttribute("zipCodeForm") ZipCodeForm form) {
 		List<ZipCodeBO> zipCodes = new ArrayList<>();
@@ -80,9 +84,6 @@ public class HomeController {
 			form.setErrors(Strings.MELISSA_DATA_ERROR);
 		}
 		List<String> selectedKeys = autoSelectRoutes(form, zipCodes);
-		
-		//maybe use the builder pattern for autoSelectRoutes?
-		//maybe use decorator for house value range and income range have value?
 		
 		Collections.sort(zipCodes);
 		form.setZipCodes(zipCodes);

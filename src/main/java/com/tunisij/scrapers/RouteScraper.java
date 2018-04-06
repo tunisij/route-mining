@@ -15,6 +15,7 @@ import com.tunisij.common.Strings;
 
 public class RouteScraper extends BaseScraper {
 	
+	//Gets routes for all zipCodes in the list
 	public List<RouteBO> getRoutesForZipCodes(List<ZipCodeBO> zipCodes) throws IOException {
 		List<RouteBO> routes = new ArrayList<>();
 		for (ZipCodeBO zipCodeBO : zipCodes) {
@@ -23,6 +24,7 @@ public class RouteScraper extends BaseScraper {
 		return routes;
 	}
 	
+	//Gets routes for a specific zipCode from MelissaData
 	public List<RouteBO> getRoutesForZipCode(Integer zipCode) throws IOException {
 		List<RouteBO> routeList = new ArrayList<>();
 		Document document = null;
@@ -39,6 +41,7 @@ public class RouteScraper extends BaseScraper {
 		for (int i = 4; i < elements.size()-2; i++) {
 			Elements routeElements = elements.get(i).children();
 			
+			//Uses lombok builder (spring implementation of builder pattern)
 			RouteBO routeBO = RouteBO.builder()
 					.zipCode(zipCode)
 					.route(routeElements.get(0).text())

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tunisij.businessObjects.RouteBO;
 import com.tunisij.scrapers.RouteScraper;
 
+//Implementation of routeStrategy
 @Service
 public class ExternalRouteStrategy implements RouteStrategy {
 

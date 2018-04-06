@@ -16,6 +16,7 @@ import com.tunisij.common.Strings;
 public class ZipCodeScraper extends BaseScraper {
 	
 	public ZipCodeBO getZipCodeData(Integer zipCodeInt) throws IOException {
+		//Uses lombok builder (spring implementation of builder pattern)
 		ZipCodeBO zipCodeBO = ZipCodeBO.builder().zipCode(zipCodeInt).build();
 		String fullUrl = Strings.ZIP_CODE_LOOKUP_URL + Strings.TYPE_ZIP_2_CITY + Strings.ZIP_SEARCH + zipCodeInt;
 		Document document = null;
