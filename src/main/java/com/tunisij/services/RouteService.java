@@ -73,7 +73,7 @@ public class RouteService {
 		List<RouteBO> routes = localContext.executeFetch(zipCode);
 		
 		if (routes.isEmpty()) {
-			externalContext.executeFetch(zipCode);
+			routes = externalContext.executeFetch(zipCode);
 			routeDAO.insertRoutes(routes);
 		}
 		

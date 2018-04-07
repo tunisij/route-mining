@@ -29,11 +29,11 @@ public class RouteScraper extends BaseScraper {
 		List<RouteBO> routeList = new ArrayList<>();
 		Document document = null;
 		
-		document = Jsoup.connect(Strings.SITE_URL + zipCode).timeout(0).get();
+		document = Jsoup.connect(Strings.SITE_URL + zipCode).ignoreContentType(true).ignoreHttpErrors(true).timeout(10000).get();
 		Element element = document.getElementsByClass("Tableresultborder").first();
 		
 		if (element == null) {
-			return routeList;
+			throw new IOException();
 		}
 		
 		Elements elements = element.getElementsByTag("tr");
